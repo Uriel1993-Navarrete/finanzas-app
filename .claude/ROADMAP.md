@@ -15,6 +15,40 @@
 
 ## 🎯 Próximas Funcionalidades Prioritarias
 
+### 🏗️ Fase 1.5: Gestión de Categorías Personalizadas
+**Prioridad: CRÍTICA** | **Estimado: 2-3 días**
+
+**¿Por qué es importante?**
+Base fundamental para presupuestos. Permite a los usuarios crear, editar y organizar sus propias categorías y subcategorías adaptadas a su estilo de vida.
+
+**Funcionalidades:**
+- [ ] Ver lista de categorías actuales (ingresos y gastos)
+- [ ] Crear nuevas categorías con nombre, ícono y color
+- [ ] Editar categorías existentes
+- [ ] Eliminar categorías (con validación si tienen transacciones)
+- [ ] Crear subcategorías dentro de categorías principales
+- [ ] Organizar categorías por orden de preferencia
+- [ ] Filtrar categorías por tipo (ingreso/gasto)
+- [ ] Búsqueda de categorías
+
+**UI/UX:**
+- Nueva sección en menú lateral o pestaña de configuración
+- Lista con swipe para editar/eliminar
+- FloatingActionButton para crear nueva
+- Dialog/Bottom sheet para formulario de creación/edición
+- Selector de iconos predefinidos
+- Selector de colores
+- Confirmación antes de eliminar
+
+**Validaciones:**
+- No permitir eliminar categorías con transacciones asociadas
+- Nombres únicos por tipo (ingreso/gasto)
+- Al menos 1 categoría de cada tipo debe existir
+
+**Impacto:** ⭐⭐⭐⭐⭐ (Crítico - Base para presupuestos y personalización)
+
+---
+
 ### 🔥 Fase 2: Presupuestos y Control de Gastos
 **Prioridad: CRÍTICA** | **Estimado: 1 semana**
 
@@ -143,13 +177,14 @@ Evita pagos tardíos y multas, mejorando la organización financiera.
 
 | Fase | Funcionalidad | Duración | Fecha Inicio | Fecha Fin |
 |------|--------------|----------|--------------|-----------|
+| 1.5 | Gestión de Categorías | 2-3 días | TBD | TBD |
 | 2 | Presupuestos | 1 semana | TBD | TBD |
 | 3 | Atajos Rápidos | 3-4 días | TBD | TBD |
 | 4 | Reportes y Estadísticas | 1 semana | TBD | TBD |
 | 5 | Planes de Ahorro | 4-5 días | TBD | TBD |
 | 6 | Recordatorios | 3-4 días | TBD | TBD |
 
-**Tiempo total estimado:** 4-5 semanas
+**Tiempo total estimado:** 5-6 semanas
 
 ---
 
