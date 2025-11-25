@@ -52,4 +52,30 @@ class Formatters {
     final formatter = NumberFormat('#,##0.${'0' * decimals}', 'es_MX');
     return formatter.format(value);
   }
+
+  /// Formatea una moneda de forma compacta (K, M, B)
+  /// Ej: 1,234 → $1.2K, 1,234,567 → $1.2M
+  static String compactCurrency(double amount, {String symbol = '\$'}) {
+    if (amount.abs() < 1000) {
+      return currency(amount, symbol: symbol);
+    }
+
+    final absAmount = amount.abs();
+    String suffix;
+    double divisor;
+
+    if (absAmount >= 1000000000) {
+      suffix = 'B';
+      divisor = 1000000000;
+    } else if (absAmount >= 1000000) {
+      suffix = 'M';
+      divisor = 1000000;
+    } else {
+      suffix = 'K';
+      divisor = 1000;
+    }
+
+    final compact = amount / divisor;
+    return '$symbol${compact.toStringAsFixed(1)}$suffix';
+  }
 }
