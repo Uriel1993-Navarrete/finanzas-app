@@ -28,6 +28,7 @@ import '../../features/categories/domain/usecases/search_categories.dart';
 import '../../features/categories/domain/usecases/update_category.dart';
 import '../../features/categories/domain/usecases/validate_category_deletion.dart';
 import '../../features/categories/presentation/bloc/category_bloc.dart';
+import '../../features/categories/presentation/bloc/category_management_bloc.dart';
 
 // Transactions
 import '../../features/transactions/data/datasources/transaction_remote_datasource.dart';
@@ -202,6 +203,17 @@ Future<void> initializeDependencies() async {
       createCategory: sl(),
       updateCategory: sl(),
       deleteCategory: sl(),
+    ),
+  );
+
+  // Category Management (nuevo BLoC para gestión avanzada)
+  sl.registerFactory(
+    () => CategoryManagementBloc(
+      repository: sl(),
+      checkCategoryNameExists: sl(),
+      getSubcategories: sl(),
+      searchCategories: sl(),
+      validateCategoryDeletion: sl(),
     ),
   );
 
