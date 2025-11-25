@@ -120,6 +120,10 @@ Antes de marcar una tarea como completada, verificar:
    - Probar manualmente todos los flujos
    - Validar en dispositivo real
    - Verificar que no se rompan funcionalidades existentes
+   - **Generar APK después de cada fase completada**
+     ```bash
+     flutter build apk --release
+     ```
 
 5. **Refinamiento** (10% del tiempo)
    - Optimizar performance

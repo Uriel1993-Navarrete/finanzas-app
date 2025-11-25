@@ -18,6 +18,7 @@ abstract class TransactionRemoteDataSource {
   Future<TransactionModel> updateTransaction(TransactionModel transaction);
   Future<void> deleteTransaction(String id);
   Future<Map<String, double>> getMonthlyBalance(String userId, int year, int month);
+  Future<int> getTransactionCount(String categoryId);
 }
 
 /// Implementación del Data Source remoto con Supabase
@@ -185,6 +186,20 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
       };
     } catch (e) {
       throw Exception('Error al obtener balance mensual: $e');
+    }
+  }
+
+  @override
+  Future<int> getTransactionCount(String categoryId) async {
+    try {
+      final response = await supabaseClient
+          .from('transactions')
+          .select('id')
+          .eq('category_id', categoryId);
+
+      return (response as List).length;
+    } catch (e) {
+      throw Exception('Error al contar transacciones: $e');
     }
   }
 }

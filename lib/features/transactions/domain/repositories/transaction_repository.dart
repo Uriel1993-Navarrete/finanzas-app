@@ -23,4 +23,8 @@ abstract class TransactionRepository {
     int year,
     int month,
   );
+
+  /// Obtiene el número de transacciones asociadas a una categoría
+  /// Útil para validaciones antes de eliminar una categoría
+  Future<Either<Failure, int>> getTransactionCount(String categoryId);
 }

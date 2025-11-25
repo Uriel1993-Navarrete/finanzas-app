@@ -142,4 +142,14 @@ class TransactionRepositoryImpl implements TransactionRepository {
       return Left(ServerFailure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, int>> getTransactionCount(String categoryId) async {
+    try {
+      final count = await remoteDataSource.getTransactionCount(categoryId);
+      return Right(count);
+    } catch (e) {
+      return Left(ServerFailure(e.toString()));
+    }
+  }
 }

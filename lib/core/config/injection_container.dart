@@ -17,12 +17,16 @@ import '../../features/auth/presentation/bloc/auth_bloc.dart';
 import '../../features/categories/data/datasources/category_remote_datasource.dart';
 import '../../features/categories/data/repositories/category_repository_impl.dart';
 import '../../features/categories/domain/repositories/category_repository.dart';
+import '../../features/categories/domain/usecases/check_category_name_exists.dart';
 import '../../features/categories/domain/usecases/create_category.dart';
 import '../../features/categories/domain/usecases/delete_category.dart';
 import '../../features/categories/domain/usecases/get_categories.dart';
 import '../../features/categories/domain/usecases/get_categories_by_type.dart';
+import '../../features/categories/domain/usecases/get_subcategories.dart';
 import '../../features/categories/domain/usecases/initialize_default_categories.dart';
+import '../../features/categories/domain/usecases/search_categories.dart';
 import '../../features/categories/domain/usecases/update_category.dart';
+import '../../features/categories/domain/usecases/validate_category_deletion.dart';
 import '../../features/categories/presentation/bloc/category_bloc.dart';
 
 // Transactions
@@ -78,17 +82,18 @@ Future<void> initializeDependencies() async {
     ),
   );
 
-  // Categories
-  sl.registerLazySingleton<CategoryRemoteDataSource>(
-    () => CategoryRemoteDataSourceImpl(
+  // Transactions (moved before Categories because Categories depends on it)
+  sl.registerLazySingleton<TransactionRemoteDataSource>(
+    () => TransactionRemoteDataSourceImpl(
       supabaseClient: sl(),
     ),
   );
 
-  // Transactions
-  sl.registerLazySingleton<TransactionRemoteDataSource>(
-    () => TransactionRemoteDataSourceImpl(
+  // Categories
+  sl.registerLazySingleton<CategoryRemoteDataSource>(
+    () => CategoryRemoteDataSourceImpl(
       supabaseClient: sl(),
+      transactionDataSource: sl(),
     ),
   );
 
@@ -143,10 +148,19 @@ Future<void> initializeDependencies() async {
   // Categories
   sl.registerLazySingleton(() => GetCategories(sl()));
   sl.registerLazySingleton(() => GetCategoriesByType(sl()));
+  sl.registerLazySingleton(() => GetSubcategories(sl()));
   sl.registerLazySingleton(() => CreateCategory(sl()));
   sl.registerLazySingleton(() => UpdateCategory(sl()));
   sl.registerLazySingleton(() => DeleteCategory(sl()));
   sl.registerLazySingleton(() => InitializeDefaultCategories(sl()));
+  sl.registerLazySingleton(() => CheckCategoryNameExists(sl()));
+  sl.registerLazySingleton(() => SearchCategories(sl()));
+  sl.registerLazySingleton(
+    () => ValidateCategoryDeletion(
+      categoryRepository: sl(),
+      transactionRepository: sl(),
+    ),
+  );
 
   // Transactions
   sl.registerLazySingleton(() => GetTransactions(sl()));
