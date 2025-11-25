@@ -1,5 +1,12 @@
 # Instrucciones de Desarrollo para Claude Code
 
+## 📋 Documentos de Referencia
+
+- **[ROADMAP.md](.claude/ROADMAP.md)**: Plan de trabajo con funcionalidades prioritarias
+- **Este documento**: Guías de desarrollo y estándares de código
+
+---
+
 ## Principios Fundamentales
 
 ### 1. Pruebas Básicas Obligatorias
@@ -87,7 +94,45 @@ Antes de marcar una tarea como completada, verificar:
 - Hacer push frecuente para no perder trabajo
 - Merge a `main` solo cuando la funcionalidad esté completamente probada
 
-### 5. Comunicación con el Usuario
+### 5. Proceso de Trabajo por Funcionalidad
+
+**Antes de empezar cualquier funcionalidad:**
+
+1. **Consultar el [ROADMAP.md](.claude/ROADMAP.md)**
+   - Verificar la fase actual
+   - Leer los requisitos completos de la funcionalidad
+   - Entender el impacto y prioridad
+
+2. **Planificación** (10% del tiempo)
+   - Definir casos de uso específicos
+   - Identificar qué capas se verán afectadas (domain/data/presentation)
+   - Planear cambios en Supabase si aplica
+   - Crear estructura de archivos necesaria
+
+3. **Desarrollo** (60% del tiempo)
+   - Seguir Clean Architecture
+   - Implementar en orden: domain → data → presentation
+   - Mantener UI moderna e intuitiva según ROADMAP
+   - Agregar logging apropiado
+
+4. **Pruebas** (20% del tiempo)
+   - Compilar y ejecutar análisis estático
+   - Probar manualmente todos los flujos
+   - Validar en dispositivo real
+   - Verificar que no se rompan funcionalidades existentes
+
+5. **Refinamiento** (10% del tiempo)
+   - Optimizar performance
+   - Ajustar UI/UX según feedback
+   - Documentar código complejo
+   - Actualizar ROADMAP marcando como completado
+
+**Mantener el enfoque:**
+- Una funcionalidad a la vez (no saltar entre fases)
+- Completar totalmente antes de pasar a la siguiente
+- Priorizar calidad sobre velocidad
+
+### 6. Comunicación con el Usuario
 
 - Reportar problemas encontrados durante las pruebas
 - Solicitar aclaraciones cuando algo no esté claro

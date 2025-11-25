@@ -22,7 +22,14 @@
       "Bash(test:*)",
       "Bash(C:Repositoriofinanzas-appsrcflutterbinflutter analyze)",
       "Bash(git init:*)",
-      "Bash(git add:*)"
+      "Bash(git add:*)",
+      "Bash(git commit -m \"$(cat <<''EOF''\nInitial commit - App de Finanzas Personal\n\n- Clean Architecture con Flutter y Supabase\n- Autenticación con email y Google\n- Gestión de transacciones (ingresos y egresos)\n- Categorías predeterminadas con inicialización automática\n- Dashboard con balance mensual y transacciones recientes\n- Sistema de categorías personalizables\n- Planes de ahorro\n- Estado combinado para transacciones y balance\n- Logging integrado para debugging\n\n🤖 Generated with [Claude Code](https://claude.com/claude-code)\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
+      "Bash(git remote add:*)",
+      "Bash(git branch:*)",
+      "Bash(git push:*)",
+      "Bash(git fetch:*)",
+      "Bash(git checkout:*)",
+      "Bash(git commit:*)"
     ],
     "deny": [],
     "ask": []
