@@ -1,0 +1,30 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter --version:*)",
+      "Bash(git clone:*)",
+      "Bash(C:srcflutterbinflutter.bat doctor)",
+      "Bash(/c/src/flutter/bin/flutter doctor:*)",
+      "Bash(./srcflutter/bin/flutter doctor:*)",
+      "Bash(./srcflutter/bin/flutter create:*)",
+      "Bash(mkdir:*)",
+      "Bash(./srcflutter/bin/flutter pub:*)",
+      "Bash(./srcflutter/bin/flutter analyze:*)",
+      "Bash(./srcflutter/bin/flutter clean:*)",
+      "Bash(./srcflutter/bin/flutter build:*)",
+      "Bash(where:*)",
+      "Bash(powershell.exe -Command \"Start-Process ''ms-settings:developers''\")",
+      "Bash(./srcflutter/bin/flutter config:*)",
+      "Bash(export ANDROID_HOME=\"$HOME/Android/Sdk\")",
+      "Bash(\"$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager\" --list)",
+      "Bash(cmd //c \"C:\\Users\\SYGNO\\Android\\Sdk\\cmdline-tools\\latest\\bin\\sdkmanager.bat \"\"platform-tools\"\" \"\"platforms;android-34\"\" \"\"build-tools;34.0.0\"\" --sdk_root=C:\\Users\\SYGNO\\Android\\Sdk\")",
+      "Bash(export JAVA_HOME=\"/c/Program Files/Android/Android Studio/jbr\")",
+      "Bash(test:*)",
+      "Bash(C:Repositoriofinanzas-appsrcflutterbinflutter analyze)",
+      "Bash(git init:*)",
+      "Bash(git add:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}
