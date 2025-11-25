@@ -292,35 +292,33 @@ class _DashboardPageState extends State<DashboardPage> {
           }
         },
       ),
-      floatingActionButton: Stack(
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          Positioned(
-            bottom: 16,
-            right: 16,
-            child: FloatingActionButton.small(
-              heroTag: 'logs',
-              onPressed: () {
-                Navigator.of(context).push(
-                  MaterialPageRoute(builder: (_) => const LogsPage()),
-                );
-              },
-              backgroundColor: Colors.orange,
-              child: const Icon(Icons.bug_report, size: 20),
-            ),
+          // Botón de logs
+          FloatingActionButton.small(
+            heroTag: 'logs',
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const LogsPage()),
+              );
+            },
+            backgroundColor: Colors.orange,
+            child: const Icon(Icons.bug_report, size: 20),
           ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: FloatingActionButton(
-              heroTag: 'add',
-              onPressed: () {
-                _showAddTransactionSheet();
-              },
-              child: const Icon(Icons.add),
-            ),
+          const SizedBox(height: 12),
+          // Botón principal de agregar transacción
+          FloatingActionButton(
+            heroTag: 'add',
+            onPressed: () {
+              _showAddTransactionSheet();
+            },
+            child: const Icon(Icons.add),
           ),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 

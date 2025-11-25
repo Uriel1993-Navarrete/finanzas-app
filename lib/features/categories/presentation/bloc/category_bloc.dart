@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
+import '../../../../core/utils/logger.dart';
 import '../../domain/entities/category.dart';
 import '../../domain/usecases/create_category.dart';
 import '../../domain/usecases/delete_category.dart';
@@ -36,11 +37,18 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     LoadCategoriesRequested event,
     Emitter<CategoryState> emit,
   ) async {
+    AppLogger.info('Loading categories for user: ${event.userId}', tag: 'CategoryBloc');
     emit(CategoryLoading());
     final result = await getCategories(event.userId);
     result.fold(
-      (failure) => emit(CategoryError(message: failure.message)),
-      (categories) => emit(CategoriesLoaded(categories: categories)),
+      (failure) {
+        AppLogger.error('Failed to load categories', tag: 'CategoryBloc', error: failure.message);
+        emit(CategoryError(message: failure.message));
+      },
+      (categories) {
+        AppLogger.info('Loaded ${categories.length} categories', tag: 'CategoryBloc');
+        emit(CategoriesLoaded(categories: categories));
+      },
     );
   }
 
@@ -48,14 +56,21 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     LoadCategoriesByTypeRequested event,
     Emitter<CategoryState> emit,
   ) async {
+    AppLogger.info('Loading categories by type: ${event.type}', tag: 'CategoryBloc');
     emit(CategoryLoading());
     final result = await getCategoriesByType(
       userId: event.userId,
       type: event.type,
     );
     result.fold(
-      (failure) => emit(CategoryError(message: failure.message)),
-      (categories) => emit(CategoriesLoaded(categories: categories)),
+      (failure) {
+        AppLogger.error('Failed to load categories by type', tag: 'CategoryBloc', error: failure.message);
+        emit(CategoryError(message: failure.message));
+      },
+      (categories) {
+        AppLogger.info('Loaded ${categories.length} categories of type ${event.type}', tag: 'CategoryBloc');
+        emit(CategoriesLoaded(categories: categories));
+      },
     );
   }
 
@@ -63,13 +78,20 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     CreateCategoryRequested event,
     Emitter<CategoryState> emit,
   ) async {
+    AppLogger.info('Creating category: ${event.category.name} (${event.category.type})', tag: 'CategoryBloc');
     emit(CategoryLoading());
     final result = await createCategory(event.category);
     result.fold(
-      (failure) => emit(CategoryError(message: failure.message)),
-      (category) => emit(CategoryOperationSuccess(
-        message: 'Categoría creada exitosamente',
-      )),
+      (failure) {
+        AppLogger.error('Failed to create category', tag: 'CategoryBloc', error: failure.message);
+        emit(CategoryError(message: failure.message));
+      },
+      (category) {
+        AppLogger.info('Category created successfully: ${category.name}', tag: 'CategoryBloc');
+        emit(CategoryOperationSuccess(
+          message: 'Categoría creada exitosamente',
+        ));
+      },
     );
   }
 
@@ -77,13 +99,20 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     UpdateCategoryRequested event,
     Emitter<CategoryState> emit,
   ) async {
+    AppLogger.info('Updating category: ${event.category.id}', tag: 'CategoryBloc');
     emit(CategoryLoading());
     final result = await updateCategory(event.category);
     result.fold(
-      (failure) => emit(CategoryError(message: failure.message)),
-      (category) => emit(CategoryOperationSuccess(
-        message: 'Categoría actualizada exitosamente',
-      )),
+      (failure) {
+        AppLogger.error('Failed to update category', tag: 'CategoryBloc', error: failure.message);
+        emit(CategoryError(message: failure.message));
+      },
+      (category) {
+        AppLogger.info('Category updated successfully: ${category.name}', tag: 'CategoryBloc');
+        emit(CategoryOperationSuccess(
+          message: 'Categoría actualizada exitosamente',
+        ));
+      },
     );
   }
 
@@ -91,13 +120,20 @@ class CategoryBloc extends Bloc<CategoryEvent, CategoryState> {
     DeleteCategoryRequested event,
     Emitter<CategoryState> emit,
   ) async {
+    AppLogger.info('Deleting category: ${event.categoryId}', tag: 'CategoryBloc');
     emit(CategoryLoading());
     final result = await deleteCategory(event.categoryId);
     result.fold(
-      (failure) => emit(CategoryError(message: failure.message)),
-      (_) => emit(CategoryOperationSuccess(
-        message: 'Categoría eliminada exitosamente',
-      )),
+      (failure) {
+        AppLogger.error('Failed to delete category', tag: 'CategoryBloc', error: failure.message);
+        emit(CategoryError(message: failure.message));
+      },
+      (_) {
+        AppLogger.info('Category deleted successfully', tag: 'CategoryBloc');
+        emit(CategoryOperationSuccess(
+          message: 'Categoría eliminada exitosamente',
+        ));
+      },
     );
   }
 }

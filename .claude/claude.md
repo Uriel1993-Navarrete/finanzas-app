@@ -66,7 +66,20 @@
 - **Inyección de Dependencias**: Usar `get_it` (service locator `sl`)
 - **Manejo de Errores**: Usar `Either<Failure, Success>` de dartz
 - **Logging**: Usar `AppLogger` para debug y tracking
-- **Nombrado**: 
+  - **CRÍTICO**: Agregar logs en todas las funcionalidades esenciales
+  - Logs obligatorios en:
+    - Inicio y fin de operaciones CRUD
+    - Llamadas a APIs/Supabase
+    - Eventos de BLoC importantes
+    - Errores y excepciones
+    - Flujos de autenticación
+    - Transacciones financieras
+  - Formato recomendado:
+    ```dart
+    AppLogger.info('CategoryBloc', 'Creating category: ${category.name}');
+    AppLogger.error('TransactionBloc', 'Failed to save transaction', error: e);
+    ```
+- **Nombrado**:
   - Clases: PascalCase
   - Métodos/Variables: camelCase
   - Constantes: camelCase con `const`

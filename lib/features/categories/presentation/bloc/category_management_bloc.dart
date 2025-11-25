@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../../../core/utils/logger.dart';
 import '../../domain/entities/category_with_usage.dart';
 import '../../domain/repositories/category_repository.dart';
 import '../../domain/usecases/check_category_name_exists.dart';
@@ -37,6 +38,8 @@ class CategoryManagementBloc
     LoadCategoriesWithUsage event,
     Emitter<CategoryManagementState> emit,
   ) async {
+    AppLogger.info('Loading categories with usage for user: ${event.userId}',
+        tag: 'CategoryManagementBloc');
     emit(const CategoryManagementLoading());
 
     try {
@@ -45,6 +48,8 @@ class CategoryManagementBloc
 
       await categoriesResult.fold(
         (failure) async {
+          AppLogger.error('Failed to load categories',
+              tag: 'CategoryManagementBloc', error: failure.message);
           emit(CategoryManagementError(failure.message));
         },
         (categories) async {
@@ -57,8 +62,8 @@ class CategoryManagementBloc
 
             categoryWithUsageResult.fold(
               (failure) {
-                // Si falla para una categoría, continuar con las demás
-                // pero podríamos loguear el error
+                AppLogger.warning('Failed to load usage for category: ${category.id}',
+                    tag: 'CategoryManagementBloc');
               },
               (categoryWithUsage) {
                 categoriesWithUsage.add(categoryWithUsage);
@@ -66,10 +71,14 @@ class CategoryManagementBloc
             );
           }
 
+          AppLogger.info('Loaded ${categoriesWithUsage.length} categories with usage',
+              tag: 'CategoryManagementBloc');
           emit(CategoriesWithUsageLoaded(categoriesWithUsage));
         },
       );
     } catch (e) {
+      AppLogger.error('Exception loading categories',
+          tag: 'CategoryManagementBloc', error: e);
       emit(CategoryManagementError('Error al cargar categorías: $e'));
     }
   }
@@ -79,14 +88,23 @@ class CategoryManagementBloc
     LoadCategoryWithUsageRequested event,
     Emitter<CategoryManagementState> emit,
   ) async {
+    AppLogger.info('Loading category with usage: ${event.categoryId}',
+        tag: 'CategoryManagementBloc');
     emit(const CategoryManagementLoading());
 
     final result = await repository.getCategoryWithUsage(event.categoryId);
 
     result.fold(
-      (failure) => emit(CategoryManagementError(failure.message)),
-      (categoryWithUsage) =>
-          emit(CategoryWithUsageLoaded(categoryWithUsage)),
+      (failure) {
+        AppLogger.error('Failed to load category with usage',
+            tag: 'CategoryManagementBloc', error: failure.message);
+        emit(CategoryManagementError(failure.message));
+      },
+      (categoryWithUsage) {
+        AppLogger.info('Category with usage loaded successfully: ${categoryWithUsage.category.name}',
+            tag: 'CategoryManagementBloc');
+        emit(CategoryWithUsageLoaded(categoryWithUsage));
+      },
     );
   }
 
@@ -95,6 +113,8 @@ class CategoryManagementBloc
     SearchCategoriesRequested event,
     Emitter<CategoryManagementState> emit,
   ) async {
+    AppLogger.info('Searching categories: query="${event.query}", type=${event.type}',
+        tag: 'CategoryManagementBloc');
     emit(const CategoryManagementLoading());
 
     final result = await searchCategories(
@@ -105,11 +125,19 @@ class CategoryManagementBloc
     );
 
     result.fold(
-      (failure) => emit(CategoryManagementError(failure.message)),
-      (results) => emit(CategorySearchResults(
-        results: results,
-        query: event.query,
-      )),
+      (failure) {
+        AppLogger.error('Failed to search categories',
+            tag: 'CategoryManagementBloc', error: failure.message);
+        emit(CategoryManagementError(failure.message));
+      },
+      (results) {
+        AppLogger.info('Found ${results.length} categories matching query',
+            tag: 'CategoryManagementBloc');
+        emit(CategorySearchResults(
+          results: results,
+          query: event.query,
+        ));
+      },
     );
   }
 
@@ -118,16 +146,26 @@ class CategoryManagementBloc
     ValidateCategoryDeletionRequested event,
     Emitter<CategoryManagementState> emit,
   ) async {
+    AppLogger.info('Validating category deletion: ${event.categoryId}',
+        tag: 'CategoryManagementBloc');
     emit(const CategoryManagementLoading());
 
     final result = await validateCategoryDeletion(event.categoryId);
 
     result.fold(
-      (failure) => emit(CategoryManagementError(failure.message)),
-      (validationResult) => emit(CategoryDeletionValidated(
-        validationResult: validationResult,
-        categoryId: event.categoryId,
-      )),
+      (failure) {
+        AppLogger.error('Failed to validate category deletion',
+            tag: 'CategoryManagementBloc', error: failure.message);
+        emit(CategoryManagementError(failure.message));
+      },
+      (validationResult) {
+        AppLogger.info('Category deletion validated: canDelete=${validationResult.canDelete}',
+            tag: 'CategoryManagementBloc');
+        emit(CategoryDeletionValidated(
+          validationResult: validationResult,
+          categoryId: event.categoryId,
+        ));
+      },
     );
   }
 
@@ -136,6 +174,8 @@ class CategoryManagementBloc
     CheckCategoryNameRequested event,
     Emitter<CategoryManagementState> emit,
   ) async {
+    AppLogger.info('Checking category name: "${event.name}"',
+        tag: 'CategoryManagementBloc');
     // No emitir loading para no interrumpir la UI durante validación en tiempo real
     final result = await checkCategoryNameExists(
       userId: event.userId,
@@ -145,11 +185,19 @@ class CategoryManagementBloc
     );
 
     result.fold(
-      (failure) => emit(CategoryManagementError(failure.message)),
-      (nameExists) => emit(CategoryNameValidated(
-        nameExists: nameExists,
-        name: event.name,
-      )),
+      (failure) {
+        AppLogger.error('Failed to check category name',
+            tag: 'CategoryManagementBloc', error: failure.message);
+        emit(CategoryManagementError(failure.message));
+      },
+      (nameExists) {
+        AppLogger.info('Category name check: exists=$nameExists',
+            tag: 'CategoryManagementBloc');
+        emit(CategoryNameValidated(
+          nameExists: nameExists,
+          name: event.name,
+        ));
+      },
     );
   }
 
@@ -158,16 +206,26 @@ class CategoryManagementBloc
     LoadSubcategoriesRequested event,
     Emitter<CategoryManagementState> emit,
   ) async {
+    AppLogger.info('Loading subcategories for parent: ${event.parentId}',
+        tag: 'CategoryManagementBloc');
     emit(const CategoryManagementLoading());
 
     final result = await getSubcategories(event.parentId);
 
     result.fold(
-      (failure) => emit(CategoryManagementError(failure.message)),
-      (subcategories) => emit(SubcategoriesLoaded(
-        subcategories: subcategories,
-        parentId: event.parentId,
-      )),
+      (failure) {
+        AppLogger.error('Failed to load subcategories',
+            tag: 'CategoryManagementBloc', error: failure.message);
+        emit(CategoryManagementError(failure.message));
+      },
+      (subcategories) {
+        AppLogger.info('Loaded ${subcategories.length} subcategories',
+            tag: 'CategoryManagementBloc');
+        emit(SubcategoriesLoaded(
+          subcategories: subcategories,
+          parentId: event.parentId,
+        ));
+      },
     );
   }
 }
